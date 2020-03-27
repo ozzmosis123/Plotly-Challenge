@@ -14,22 +14,30 @@
     <div class="jumbotron text-center">
       <h1>Belly Button Biodiversity Dashboard</h1>
       <p>Use the interactive charts below to explore the dataset</p>
-    </div>
+  </div>
 
-    <div id="bar"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-body">Test Subject ID</div>
+            <select id="selDataset">
+            <!-- <option value="dataset1">DataSet1</option> -->
+            </select>
+        </div>
+      
+        <div class="panel panel-default">
+          <div class="panel-heading">Demographic Info</div>
+          <div class="panel-body" id="sample-metadata"></div>
+        </div>
+      </div>
 
-    <div class="panel panel-default">
-      <div class="panel-body">Test Subject ID</div>
-      <select id="selDataset">
-      <!-- <option value="dataset1">DataSet1</option> -->
-      </select>
+      <div class="col-md-6">
+        <div id="bar"></div>
+      </div>
+        
+      <script src="app.js"></script>
     </div>
-    
-    <div class="panel panel-default">
-      <div class="panel-heading">Demographic Info</div>
-      <div class="panel-body" id="sample-metadata">
-    </div>
-    <script src="app.js"></script>
   </div>
 
 </body>
