@@ -19,7 +19,6 @@ function buildMetadata(sample) {
     });
   }
 
-
 function buildCharts(sample) {
     d3.json("samples.json").then((data) => {
       // Grab values from the data json object to build the plots
@@ -43,7 +42,21 @@ function buildCharts(sample) {
       }
       Plotly.newPlot("bar", barData, barLayout);
       
+      var trace2 = {
+        x: ids,
+        y: samples,
+        text: hover_labels,
+        mode: 'markers',
+        marker: {
+          color: ids,
+          opacity: [1, 0.8, 0.6, 0.4],
+          size: samples
+        }
+      };
+      
+      var bubbleData = [trace2];
 
+      Plotly.newPlot("bubble", bubbleData);
     });
   }
 
@@ -68,9 +81,9 @@ function init() {
 
 function optionChanged(newSample) {
     // Fetch new data each time a new sample is selected
-    d3.select("#sample-metadata").on("change", buildMetadata(newSample));
-//     buildCharts(newSample);
-//     buildMetadata(newSample);
+    // d3.select("#sample-metadata").on("change", buildMetadata(newSample));
+    buildCharts(newSample);
+    buildMetadata(newSample);
 }
 
 init();
