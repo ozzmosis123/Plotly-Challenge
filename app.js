@@ -20,16 +20,17 @@ function buildMetadata(sample) {
   }
 
 function buildCharts(sample) {
-    d3.json("samples.json").then((data) => {
+    d3.json(url).then((data) => {
       // Grab values from the data json object to build the plots
-      var samples = data.samples.sample_values;
-      var ids = data.samples.id;
-      var hover_labels = data.samples.otu_labels;
+      var samples = data.samples[0].sample_values;
+      var ids = data.samples[0].id;
+      var hover_labels = data.samples[0].otu_labels;
+      console.log(samples)
       
       var trace1 = {
         type: "bar",
-        x: ids,
-        y: samples,
+        x: samples,
+        y: ids,
         text: hover_labels
       }
      
