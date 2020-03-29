@@ -11,8 +11,6 @@ function buildMetadata(sample) {
       // Use `.html("") to clear any existing metadata
       PANEL.html("");
       // Use `Object.entries` to add each key and value pair to the panel
-      // Hint: Inside the loop, you will need to use d3 to append new
-      // tags for each key-value in the metadata.
       Object.entries(result).forEach(([key, value]) => {
         PANEL.append("h6").text(`${key.toUpperCase()}: ${value}`);
       });
@@ -22,15 +20,24 @@ function buildMetadata(sample) {
 function buildCharts(sample) {
     d3.json(url).then((data) => {
       // Grab values from the data json object to build the plots
-      var samples = data.samples[0].sample_values;
-      var ids = data.samples[0].id;
-      var hover_labels = data.samples[0].otu_labels;
-      console.log(samples)
+      
+      var samples = data.samples;
+      var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
+      var result = resultArray[0];
+      console.log(result)
+     
+      var otu_id = result.otu_ids;
+      var hover_labels = result.otu_labels;
+      var sample_values = result.sample_values;
+      
+      var top_samples = sample_values.slice(0,10);
+      var top_otu_ids = otu_id.slice(0,10);
+      console.log(top_otu_ids);
       
       var trace1 = {
         type: "bar",
-        x: samples,
-        y: ids,
+        x: top_samples,
+        y: top_otu_ids,
         text: hover_labels
       }
      
@@ -44,14 +51,14 @@ function buildCharts(sample) {
       Plotly.newPlot("bar", barData, barLayout);
       
       var trace2 = {
-        x: ids,
-        y: samples,
+        x: otu_id,
+        y: sample_values,
         text: hover_labels,
         mode: 'markers',
         marker: {
-          color: ids,
+          color: otu_id,
           opacity: [1, 0.8, 0.6, 0.4],
-          size: samples
+          size: sample_values
         }
       };
       
@@ -80,14 +87,18 @@ function init() {
         })
     }
 
+ // Fetch new data each time a new sample is selected
+d3.selectAll("#selDataset").on("change", optionChanged);
+
+// This function is called when a dropdown menu item is selected
 function optionChanged(newSample) {
-    // Fetch new data each time a new sample is selected
-    // d3.select("#sample-metadata").on("change", buildMetadata(newSample));
+    // Use D3 to select the dropdown menu
+    var dropdownMenu = d3.select("#selDataset");
+    // Assign the value of the dropdown menu option to a variable
+    var newSample = dropdownMenu.property("value");
+    
     buildCharts(newSample);
     buildMetadata(newSample);
 }
 
 init();
-
-// optionChanged(newSample);
-
