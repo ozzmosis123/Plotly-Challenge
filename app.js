@@ -27,8 +27,7 @@ function buildCharts(sample) {
      
       var sample_values = result.sample_values;
       var otu_id = result.otu_ids;
-      var otu_id_string = otu_id.toString();
-      console.log(otu_id_string)
+      var concat_id = otu_id.map(id => `OTU ${id}`)
       var hover_labels = result.otu_labels;
      
       var sorted_values = sample_values.sort((a, b) => b - a);
@@ -37,7 +36,7 @@ function buildCharts(sample) {
       var trace1 = {
         type: "bar",
         x: top_samples,
-        y: otu_id_string,
+        y: concat_id,
         orientation: 'h',
         text: hover_labels
       }
@@ -55,10 +54,6 @@ function buildCharts(sample) {
         }
       }  
 
-      // for ( var i = 0 ; i < otu_id_string.length ; i++ ) {
-      //   var concat_id = otu_id_string.concat(`OTU ${otu_id_string}`);
-      // };    
-      
       Plotly.newPlot("bar", barData, barLayout);
       
       var trace2 = {
