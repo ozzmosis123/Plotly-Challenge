@@ -20,34 +20,45 @@ function buildMetadata(sample) {
 function buildCharts(sample) {
     d3.json(url).then((data) => {
       // Grab values from the data json object to build the plots
-      
       var samples = data.samples;
       var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
       var result = resultArray[0];
       console.log(result)
      
-      var otu_id = result.otu_ids;
-      var hover_labels = result.otu_labels;
       var sample_values = result.sample_values;
-      
-      var top_samples = sample_values.slice(0,10);
-      var top_otu_ids = otu_id.slice(0,10);
-      console.log(top_otu_ids);
+      var otu_id = result.otu_ids;
+      var otu_id_string = otu_id.toString();
+      console.log(otu_id_string)
+      var hover_labels = result.otu_labels;
+     
+      var sorted_values = sample_values.sort((a, b) => b - a);
+      var top_samples = sorted_values.slice(0,10);
       
       var trace1 = {
         type: "bar",
         x: top_samples,
-        y: top_otu_ids,
+        y: otu_id_string,
+        orientation: 'h',
         text: hover_labels
       }
      
       var barData = [trace1]
 
       var barLayout = {
+        title: {
+          text: 'Top OTUs Found In Individual'
+        },
         xaxis :{
-          autorange: true,
+          title: {
+            text: 'OTU Sample Value'
+          }
         }
-      }
+      }  
+
+      // for ( var i = 0 ; i < otu_id_string.length ; i++ ) {
+      //   var concat_id = otu_id_string.concat(`OTU ${otu_id_string}`);
+      // };    
+      
       Plotly.newPlot("bar", barData, barLayout);
       
       var trace2 = {
@@ -64,7 +75,18 @@ function buildCharts(sample) {
       
       var bubbleData = [trace2];
 
-      Plotly.newPlot("bubble", bubbleData);
+      var bubbleLayout = {
+        title: {
+          text: 'Total OTU Samples Found In Individual'
+        },
+        xaxis: {
+          title: {
+            text: 'OTU ID'
+          }
+        }
+      }
+
+      Plotly.newPlot("bubble", bubbleData, bubbleLayout);
     });
   }
 
